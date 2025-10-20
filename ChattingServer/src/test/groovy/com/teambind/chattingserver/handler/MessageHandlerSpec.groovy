@@ -16,56 +16,61 @@ import java.util.concurrent.BlockingQueue
 import java.util.concurrent.TimeUnit
 
 @SpringBootTest(classes = ChattingServerApplication,
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class MessageHandlerSpec extends Specification {
 
     @LocalServerPort
-    private int port;
+    int port;
 
     private ObjectMapper objectMapper = new ObjectMapper()
 
-    def "Direct chat Basic Test"() {
+    def "Group Chat Basic Test"() {
         given:
         def url = "ws://localhost:${port}/ws/v1/message"
-        BlockingQueue<String> leftQueue = new ArrayBlockingQueue<>(1)
-        BlockingQueue<String> rightQueue = new ArrayBlockingQueue<>(1)
 
-        def leftClient = new StandardWebSocketClient()
-        def leftWebSocketSession = leftClient.execute(new TextWebSocketHandler()
-        {
-            @Override
-            protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-                leftQueue.put(message.payload)
-            }
-        }, url).get()
+        def (clientA, clientB, clientC) = [createClient(url), createClient(url), createClient(url)]
 
-        def rightClient = new StandardWebSocketClient()
-        def rightWebSocketSession = rightClient.execute(new TextWebSocketHandler()
-        {
-            @Override
-            protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-                rightQueue.put(message.payload)
-            }
-        }, url).get()
 
         when:
-
-        leftWebSocketSession.sendMessage(new TextMessage(
-                objectMapper.writeValueAsString(new Message("안녕하세요"))
-        ))
-
-        rightWebSocketSession.sendMessage(new TextMessage(
-                objectMapper.writeValueAsString(new Message("hello"))
-        ))
-
-
+        clientA.session.sendMessage(new TextMessage(objectMapper.writeValueAsString(new Message("clientA", "안녕하세요 A 입니다."))))
+        clientB.session.sendMessage(new TextMessage(objectMapper.writeValueAsString(new Message("clientB", "안녕하세요 B 입니다."))))
+        clientC.session.sendMessage(new TextMessage(objectMapper.writeValueAsString(new Message("clientC", "안녕하세요 C 입니다."))))
         then:
-        rightQueue.poll(1, TimeUnit.SECONDS).contains("안녕하세요")
-        leftQueue.poll(1, TimeUnit.SECONDS).contains("hello")
+
+        def resultA= clientA.queue.poll(1, TimeUnit.SECONDS) + clientA.queue.poll(1, TimeUnit.SECONDS)
+        def resultB= clientB.queue.poll(1, TimeUnit.SECONDS) + clientB.queue.poll(1, TimeUnit.SECONDS)
+        def resultC= clientC.queue.poll(1, TimeUnit.SECONDS) + clientC.queue.poll(1, TimeUnit.SECONDS)
+
+        resultA.contains("clientB") & resultA.contains("clientC")
+        resultB.contains("clientA") & resultA.contains("clientC")
+        resultC.contains("clientA") & resultA.contains("clientB")
+
+
+        and:
+        clientA.queue.isEmpty()
+        clientB.queue.isEmpty()
+        clientC.queue.isEmpty()
+
 
         cleanup:
-        leftWebSocketSession?.close()
-        rightWebSocketSession?.close()
+        clientA.session?.close()
+        clientB.session?.close()
+        clientC.session?.close()
+
+    }
+
+
+    static def createClient(String url) {
+        BlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(5);
+        def client = new StandardWebSocketClient()
+        def webSocketSession = client.execute(new TextWebSocketHandler()
+        {
+            @Override
+            protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+                blockingQueue.put(message.payload)
+            }
+        }, url).get()
+
+        return [queue: blockingQueue, session: webSocketSession]
     }
 }

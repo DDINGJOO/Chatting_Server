@@ -26,6 +26,7 @@ public class MessageHandler extends TextWebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, @NonNull CloseStatus status) {
 		log.info("Connection Closed: {} from{}", status, session.getId());
 		sessionManager.terminateSession(session.getId());
+		log.warn("not exist empty session : {}", session.getId());
 	}
 	
 	@Override
@@ -58,8 +59,6 @@ public class MessageHandler extends TextWebSocketHandler {
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		log.info("Connection Established: {}", session.getId());
 		sessionManager.storeSession(session);
-		log.warn("not exist empty session : {}", session.getId());
-		session.close();
 	}
 	
 	

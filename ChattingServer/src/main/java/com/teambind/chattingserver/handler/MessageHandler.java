@@ -81,8 +81,8 @@ public class MessageHandler extends TextWebSocketHandler {
 	
 	private void sendMessage(WebSocketSession session, String message)  {
 		try{
-			String msg = objectMapper.writeValueAsString(message);
-			session.sendMessage(new Message(message));
+			String msg = objectMapper.writeValueAsString(new Message(message));
+			session.sendMessage(new TextMessage(msg));
 			log.info("sendMessage : {} to {}", msg, session.getId());
 		}
 		catch (Exception e)

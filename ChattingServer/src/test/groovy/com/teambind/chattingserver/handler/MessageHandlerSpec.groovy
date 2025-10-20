@@ -5,7 +5,6 @@ import com.teambind.chattingserver.ChattingServerApplication
 import com.teambind.chattingserver.dto.Message
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
-
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.client.standard.StandardWebSocketClient
@@ -26,17 +25,17 @@ class MessageHandlerSpec extends Specification {
 
     private ObjectMapper objectMapper = new ObjectMapper()
 
-    def "Direct chat Basic Test"(){
+    def "Direct chat Basic Test"() {
         given:
         def url = "ws://localhost:${port}/ws/v1/message"
-        BlockingQueue<String> leftQueue  = new ArrayBlockingQueue<>(1)
-        BlockingQueue<String> rightQueue  = new ArrayBlockingQueue<>(1)
+        BlockingQueue<String> leftQueue = new ArrayBlockingQueue<>(1)
+        BlockingQueue<String> rightQueue = new ArrayBlockingQueue<>(1)
 
         def leftClient = new StandardWebSocketClient()
         def leftWebSocketSession = leftClient.execute(new TextWebSocketHandler()
         {
             @Override
-            protected void handleTextMessage (WebSocketSession session, TextMessage message) throws Exception{
+            protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
                 leftQueue.put(message.payload)
             }
         }, url).get()
@@ -45,7 +44,7 @@ class MessageHandlerSpec extends Specification {
         def rightWebSocketSession = rightClient.execute(new TextWebSocketHandler()
         {
             @Override
-            protected void handleTextMessage (WebSocketSession session, TextMessage message) throws Exception{
+            protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
                 rightQueue.put(message.payload)
             }
         }, url).get()

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
@@ -30,7 +31,7 @@ public class MessageHandler extends TextWebSocketHandler {
 	}
 	
 	@Override
-	protected void handleTextMessage(WebSocketSession senderSession, TextMessage message){
+	protected void handleTextMessage(WebSocketSession senderSession, TextMessage message) {
 		log.info("Message Received: {} from {}", message.getPayload(), senderSession.getId());
 		String payload = message.getPayload();
 		try {
@@ -45,7 +46,7 @@ public class MessageHandler extends TextWebSocketHandler {
 		} catch (Exception e) {
 			String errorMsg = "유효한 프로토콜이 아닙니다. : " + e.getMessage();
 			log.error("erroeMessage payload : {}, from {}", payload, senderSession.getId());
-			sendMessage(senderSession, new Message("system",errorMsg));
+			sendMessage(senderSession, new Message("system", errorMsg));
 		}
 	}
 	
@@ -58,7 +59,11 @@ public class MessageHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		log.info("Connection Established: {}", session.getId());
-		sessionManager.storeSession(session);
+		//TODO : overflowStrategy And Param
+		ConcurrentWebSocketSessionDecorator concurrentWebSocketSessionDecorator =
+				new ConcurrentWebSocketSessionDecorator(session, 5000, 100 * 1024);
+		
+		sessionManager.storeSession(concurrentWebSocketSessionDecorator);
 	}
 	
 	

@@ -38,7 +38,8 @@ public class MessageHandler extends TextWebSocketHandler {
 			Message receivedMessage = objectMapper.readValue(payload, Message.class);
 			sessionManager.getSessions().forEach(
 					participantSession -> {
-						if (!participantSession.equals(senderSession)) {
+						// Compare by sessionId to handle decorated sessions correctly
+						if (!participantSession.getId().equals(senderSession.getId())) {
 							sendMessage(participantSession, receivedMessage);
 						}
 					}

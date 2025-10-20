@@ -19,11 +19,10 @@ public class MessageHandler extends TextWebSocketHandler {
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		log.info("Connection Closed: {} from{}",status, session.getId());
+		log.info("Connection Closed: {} from{}", status, session.getId());
 		if (leftside == session) {
 			leftside = null;
-		}
-		else if( rightside == session){
+		} else if (rightside == session) {
 			rightside = null;
 		}
 		
@@ -33,23 +32,17 @@ public class MessageHandler extends TextWebSocketHandler {
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		log.info("Message Received: {} from {}", message.getPayload(), session.getId());
 		String payload = message.getPayload();
-		try{
+		try {
 			Message receivedMessage = objectMapper.readValue(payload, Message.class);
-			if(leftside == session)
-			{
+			if (leftside == session) {
 				// todo : rightside == null ?
 				sendMessage(rightside, receivedMessage.content());
-			}
-			else if(rightside == session)
-			{
+			} else if (rightside == session) {
 				sendMessage(leftside, receivedMessage.content());
-			}
-			else
-			{
+			} else {
 				log.warn("not exist session : {}", session.getId());
 			}
-		}catch (Exception e)
-		{
+		} catch (Exception e) {
 			String errorMsg = "유효한 프로토콜이 아닙니다. : " + e.getMessage();
 			log.error("erroeMessage payload : {}, from {}", payload, session.getId());
 			sendMessage(session, errorMsg);
@@ -68,8 +61,7 @@ public class MessageHandler extends TextWebSocketHandler {
 		if (leftside == null) {
 			leftside = session;
 			return;
-		}
-		else if( rightside == null){
+		} else if (rightside == null) {
 			rightside = session;
 			return;
 		}
@@ -77,17 +69,15 @@ public class MessageHandler extends TextWebSocketHandler {
 		log.warn("not exist empty session : {}", session.getId());
 		session.close();
 	}
-
 	
-	private void sendMessage(WebSocketSession session, String message)  {
-		try{
+	
+	private void sendMessage(WebSocketSession session, String message) {
+		try {
 			String msg = objectMapper.writeValueAsString(new Message(message));
 			session.sendMessage(new TextMessage(msg));
 			log.info("sendMessage : {} to {}", msg, session.getId());
-		}
-		catch (Exception e)
-		{
-			log.error("메세지 발송 실패 to {} error : {} ",session.getId(), e.getMessage());
+		} catch (Exception e) {
+			log.error("메세지 발송 실패 to {} error : {} ", session.getId(), e.getMessage());
 			
 		}
 	}

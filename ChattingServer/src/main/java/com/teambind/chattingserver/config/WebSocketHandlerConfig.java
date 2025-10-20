@@ -8,7 +8,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 @Configuration
 @EnableWebSocket
-public class WebSocketHandlerConfig  implements WebSocketConfigurer {
+public class WebSocketHandlerConfig implements WebSocketConfigurer {
 	private final MessageHandler messageHandler;
 	
 	public WebSocketHandlerConfig(MessageHandler messageHandler) {
@@ -18,6 +18,6 @@ public class WebSocketHandlerConfig  implements WebSocketConfigurer {
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		registry.addHandler(messageHandler, "/ws/v1/message");
-	
+		
 	}
 }

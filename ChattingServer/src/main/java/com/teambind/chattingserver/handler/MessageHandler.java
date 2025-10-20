@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teambind.chattingserver.dto.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -18,7 +19,7 @@ public class MessageHandler extends TextWebSocketHandler {
 	private WebSocketSession rightside = null;
 	
 	@Override
-	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+	public void afterConnectionClosed(WebSocketSession session, @NonNull CloseStatus status) {
 		log.info("Connection Closed: {} from{}", status, session.getId());
 		if (leftside == session) {
 			leftside = null;
@@ -29,7 +30,7 @@ public class MessageHandler extends TextWebSocketHandler {
 	}
 	
 	@Override
-	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+	protected void handleTextMessage(WebSocketSession session, TextMessage message){
 		log.info("Message Received: {} from {}", message.getPayload(), session.getId());
 		String payload = message.getPayload();
 		try {
@@ -50,7 +51,7 @@ public class MessageHandler extends TextWebSocketHandler {
 	}
 	
 	@Override
-	public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+	public void handleTransportError(WebSocketSession session, Throwable exception) {
 		log.error("TransPortError: {} , from : {}", exception.getMessage(), session.getId());
 	}
 	

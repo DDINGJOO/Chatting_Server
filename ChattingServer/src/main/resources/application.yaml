@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: chatting-server
   profiles:
     active: dev
 server:

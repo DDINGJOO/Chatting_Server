@@ -2,6 +2,8 @@ package com.teambind.chattingserver.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teambind.chattingserver.dto.Message;
+import com.teambind.chattingserver.entity.MessageEntity;
+import com.teambind.chattingserver.repository.MessageRepository;
 import com.teambind.chattingserver.session.WebSocketSessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +21,11 @@ public class MessageHandler extends TextWebSocketHandler {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final WebSocketSessionManager sessionManager;
 	
-	public MessageHandler(WebSocketSessionManager sessionManager) {
+	private final MessageRepository messageRepository;
+	
+	public MessageHandler(WebSocketSessionManager sessionManager, MessageRepository messageRepository) {
 		this.sessionManager = sessionManager;
+		this.messageRepository = messageRepository;
 	}
 	
 	@Override
@@ -36,6 +41,9 @@ public class MessageHandler extends TextWebSocketHandler {
 		String payload = message.getPayload();
 		try {
 			Message receivedMessage = objectMapper.readValue(payload, Message.class);
+			messageRepository.save(new MessageEntity(receivedMessage.username(), receivedMessage.content()));
+			
+			
 			sessionManager.getSessions().forEach(
 					participantSession -> {
 						// Compare by sessionId to handle decorated sessions correctly

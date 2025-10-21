@@ -4,6 +4,7 @@ import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
+import org.jline.utils.InfoCmp;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -26,5 +27,22 @@ public class TerminalService {
 		}
 		terminalService.lineReader = LineReaderBuilder.builder().terminal(terminalService.terminal).variable(LineReader.HISTORY_FILE, Paths.get("./data/history.txt")).build();
 		return terminalService;
+	}
+	
+	public String readLine(String prompt){
+		return lineReader.readLine(prompt);
+	}
+	
+	public void PrintMessage(String username, String content){
+		lineReader.printAbove(String.format("%s : %s", username, content));
+	}
+	
+	public void printSystemMessage(String content) {
+		lineReader.printAbove(" ==> " + content);
+	}
+	
+	public void clearTerminal(){
+		terminal.puts(InfoCmp.Capability.clear_screen);
+		terminal.flush();
 	}
 }

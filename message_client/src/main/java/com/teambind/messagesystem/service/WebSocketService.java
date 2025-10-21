@@ -1,5 +1,6 @@
 package com.teambind.messagesystem.service;
 
+import com.teambind.messagesystem.dto.Message;
 import com.teambind.messagesystem.handler.WebSocketMessageHandler;
 import com.teambind.messagesystem.handler.WebSocketSender;
 import com.teambind.messagesystem.handler.WebSocketSessionHandler;
@@ -52,6 +53,16 @@ public class WebSocketService {
 			} catch (Exception e) {
 				terminalService.printSystemMessage(String.format("Failed to close session. error: [%s]", e.getMessage()));
 			}
+		}
+	}
+	
+	
+	public void sendMessage(Message message) {
+		if(session != null && !session.isOpen()) {
+			webSocketSender.sendMessage(session, message);
+		}
+		else {
+			terminalService.printSystemMessage("Session is not open. Message not sent.");
 		}
 	}
 }

@@ -30,7 +30,11 @@ public class TerminalService {
 	}
 	
 	public String readLine(String prompt){
-		return lineReader.readLine(prompt);
+		String input = lineReader.readLine(prompt);
+		terminal.puts(InfoCmp.Capability.cursor_up);
+		terminal.puts(InfoCmp.Capability.delete_line);
+		terminal.flush();
+		return input;
 	}
 	
 	public void PrintMessage(String username, String content){

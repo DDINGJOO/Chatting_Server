@@ -23,9 +23,9 @@ public class JsonUtil {
 		}
 	}
 	
-	public static String toJson(Object object) {
+	public static Optional<String> toJson(Object object) {
 		try {
-			return objectMapper.writeValueAsString(object);
+			return Optional.of(objectMapper.writeValueAsString(object));
 		} catch (Exception e) {
 			terminalService.printSystemMessage("Failed to convert object to JSON: " + e.getMessage());
 			return null;

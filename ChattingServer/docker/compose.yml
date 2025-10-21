@@ -1,0 +1,13 @@
+services:
+  mysql:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: chatting_db
+      MYSQL_USER: dev_user
+      MYSQL_PASSWORD: deb_password
+    ports:
+      - "13306:3306"
+    volumes:
+      - ./data/mysql_data:/var/lib/mysql

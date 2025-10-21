@@ -48,6 +48,7 @@ public class WebSocketService {
 							new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "NORMAL_CLOSURE")
 					);
 				}
+				session = null;
 			} catch (Exception e) {
 				terminalService.printSystemMessage(String.format("Failed to close session. error: [%s]", e.getMessage()));
 			}

@@ -20,12 +20,11 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import java.io.IOException;
 
 public class RestApiLoginAuthFilter extends AbstractAuthenticationProcessingFilter {
-	private final ObjectMapper objectMapper;
+	private  ObjectMapper objectMapper;
 	
 	
-	public RestApiLoginAuthFilter(RequestMatcher requiresAuthenticationRequestMatcher, AuthenticationManager authenticationManager, ObjectMapper objectMapper) {
+	public RestApiLoginAuthFilter(RequestMatcher requiresAuthenticationRequestMatcher, AuthenticationManager authenticationManager) {
 		super(requiresAuthenticationRequestMatcher, authenticationManager);
-		this.objectMapper = objectMapper;
 	}
 	
 	@Override
@@ -34,6 +33,7 @@ public class RestApiLoginAuthFilter extends AbstractAuthenticationProcessingFilt
 			throw new AuthenticationException("지원하지 않는 타입입니다." + request.getContentType()) {
 			};
 		}
+		objectMapper = new ObjectMapper();
 		
 		
 		LoginRequest loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);

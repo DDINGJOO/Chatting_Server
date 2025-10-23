@@ -16,9 +16,9 @@ public class CheckController {
 	public ResponseEntity<String> check() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if( auth != null && auth.isAuthenticated() ) {
-			return ResponseEntity.ok("인증된 사용자");
+			return ResponseEntity.ok("인증된 사용자" + auth.getName());
 		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 사용자");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 사용자" );
 		}
 	}
 }

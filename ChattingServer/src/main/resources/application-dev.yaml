@@ -2,9 +2,9 @@ spring:
   datasource:
 
     hikari:
-      jdbc-url: jdbc:mariadb://localhost:4000/chatting_db
-      username: root
-      password: pass123#
+      jdbc-url: jdbc:mariadb://localhost:13306/chatting_db
+      username: dev_user
+      password: dev_password
       driver-class-name: org.mariadb.jdbc.Driver
       pool-name: ConnectionPool
       minimum-idle: 10
@@ -26,6 +26,13 @@ spring:
     init:
       mode: always
       schema-locations: classpath:sql/schema.sql
+
+  data:
+    redis:
+      host: localhost
+      port: 16379
+      repositories:
+        enabled: false
 
 logging:
   level:

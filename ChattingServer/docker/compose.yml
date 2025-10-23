@@ -6,8 +6,24 @@ services:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: chatting_db
       MYSQL_USER: dev_user
-      MYSQL_PASSWORD: deb_password
+      MYSQL_PASSWORD: dev_password
     ports:
       - "13306:3306"
     volumes:
       - ./data/mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7.4.1
+    restart: unless-stopped
+    ports:
+      - "16379:6379"
+    volumes:
+      - ./data/redis_data:/data
+
+  redis-insight:
+    image: redis/redisinsight:2.64.1
+    restart: unless-stopped
+    ports:
+      - "15540:5540"
+    volumes:
+      - ./data/redis_insight:/data

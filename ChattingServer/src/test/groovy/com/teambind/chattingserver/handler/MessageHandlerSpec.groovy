@@ -1,7 +1,7 @@
 package com.teambind.chattingserver.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.teambind.chattingserver.ChattingServerApplication
+import com.teambind.ChattingServerApplication
 import com.teambind.chattingserver.dto.Message
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort

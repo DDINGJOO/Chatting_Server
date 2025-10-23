@@ -31,13 +31,16 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @SuppressWarnings("unused")
 public class SecurityConfig {
 	Logger log = LoggerFactory.getLogger(SecurityConfig.class);
+	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
-	};
+	}
+	
+	;
 	
 	@Bean
-	public UserDetailsService userDetailsService(){
+	public UserDetailsService userDetailsService() {
 		UserDetails userDetails = User.builder()
 				.username("testuser")
 				.password(passwordEncoder().encode("testpass"))
@@ -47,7 +50,7 @@ public class SecurityConfig {
 	}
 	
 	@Bean
-	public AuthenticationManager authenticationManager(UserDetailsService detailsService, PasswordEncoder encoder){
+	public AuthenticationManager authenticationManager(UserDetailsService detailsService, PasswordEncoder encoder) {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setUserDetailsService(detailsService);
 		provider.setPasswordEncoder(encoder);
@@ -56,11 +59,11 @@ public class SecurityConfig {
 	
 	
 	@Bean
-	public SecurityFilterChain securityFilterChain (
+	public SecurityFilterChain securityFilterChain(
 			HttpSecurity httpSecurity,
 			AuthenticationManager authenticationManager
 	) throws Exception {
-		RestApiLoginAuthFilter post = new RestApiLoginAuthFilter(new AntPathRequestMatcher("/api/v1/auth/login", "POST"), authenticationManager);
+		RestApiLoginAuthFilter post = new RestApiLoginAuthFilter(new AntPathRequestMatcher("/api/v1/auth/login", "ws/v1/connect"), authenticationManager);
 		httpSecurity.csrf(AbstractHttpConfigurer::disable)
 				.httpBasic(AbstractHttpConfigurer::disable)
 				.formLogin(AbstractHttpConfigurer::disable)
@@ -69,29 +72,25 @@ public class SecurityConfig {
 						.permitAll()
 						.anyRequest().authenticated())
 				.logout(logout -> logout.logoutUrl("/api/v1/auth/logout").logoutSuccessHandler(this::logoutHandler));
-
+		
 		return httpSecurity.build();
 	}
 	
-	private void logoutHandler(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-	{
+	private void logoutHandler(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 		response.setContentType(MediaType.TEXT_PLAIN_VALUE);
 		response.setCharacterEncoding("UTF-8");
 		String message;
 		
-		if( authentication != null && authentication.isAuthenticated())
-		{
+		if (authentication != null && authentication.isAuthenticated()) {
 			response.setStatus(HttpStatus.OK.value());
 			message = "로그아웃 성공";
-		}
-		else{
+		} else {
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
 			message = "로그아웃 실패";
 		}
-		try{
+		try {
 			response.getWriter().write(message);
-		}catch (Exception e)
-		{
+		} catch (Exception e) {
 			log.error("logoutHandler error : {}", e.getMessage());
 		}
 		

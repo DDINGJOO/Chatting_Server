@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 
+@Component
 public class CustomHandleShakeInterceptors extends HttpSessionHandshakeInterceptor {
 	Logger log = LoggerFactory.getLogger(CustomHandleShakeInterceptors.class);
 	

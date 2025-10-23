@@ -3,6 +3,9 @@ package com.teambind.common.config.auth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,4 +31,11 @@ public class SecurityConfig {
 		return new InMemoryUserDetailsManager(userDetails);
 	}
 	
+	@Bean
+	public AuthenticationManager authenticationManager(UserDetailsService detailsService, PasswordEncoder encoder){
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(detailsService);
+		provider.setPasswordEncoder(encoder);
+		return new ProviderManager(provider);
+	}
 }

@@ -1,0 +1,17 @@
+# Docker data
+ChattingServer/docker/data/
+
+# Gradle
+.gradle/
+*/.gradle/
+build/
+*/build/
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# macOS
+.DS_Store

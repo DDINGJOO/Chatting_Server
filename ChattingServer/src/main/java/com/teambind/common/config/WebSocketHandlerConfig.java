@@ -1,4 +1,4 @@
-package com.teambind.chattingserver.config;
+package com.teambind.common.config;
 
 import com.teambind.chattingserver.handler.MessageHandler;
 import org.springframework.context.annotation.Configuration;

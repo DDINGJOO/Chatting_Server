@@ -1,4 +1,4 @@
-package com.teambind.chattingserver.config;
+package com.teambind.common.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,5 +1,6 @@
 package com.teambind.auth.entity;
 
+import com.teambind.common.config.baseEntity.BaseEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -7,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "message_user")
-public class MessageUserEntity {
+public class MessageUserEntity extends BaseEntity {
 	
 	@Column(name = "user_id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +21,6 @@ public class MessageUserEntity {
 	@Column(name = "password", nullable = false)
 	private String password;
 	
-	@Column(name = "created_at", nullable = false)
-	private LocalDateTime createdAt;
-	
-	@Column(name = "updated_at", nullable = false)
-	private LocalDateTime updatedAt;
 	
 	protected MessageUserEntity() {
 		// JPA requires a no-arg constructor
@@ -36,17 +32,7 @@ public class MessageUserEntity {
 	}
 	
 	
-	@PrePersist
-	public void prePersist() {
-		this.createdAt = LocalDateTime.now();
-		this.updatedAt = this.createdAt;
-	}
-	
-	@PreUpdate
-	public void preUpdate() {
-		this.updatedAt = LocalDateTime.now();
-	}
-	
+
 	
 	@Override
 	public String toString() {
@@ -54,8 +40,8 @@ public class MessageUserEntity {
 				"userId=" + userId +
 				", username='" + username + '\'' +
 				", password='" + password + '\'' +
-				", createdAt=" + createdAt +
-				", updatedAt=" + updatedAt +
+				", createdAt=" + getCreatedAt() +
+				", updatedAt=" + getUpdatedAt() +
 				'}';
 	}
 	

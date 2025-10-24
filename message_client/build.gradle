@@ -27,11 +27,10 @@ test {
 }
 
 
-
 application {
     mainClass = 'com/teambind/messagesystem/MessageClient'
 }
 
-tasks.run{
+tasks.run {
     standardInput = System.in
 }

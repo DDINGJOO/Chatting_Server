@@ -9,7 +9,6 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.server.HandshakeInterceptor;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 import java.util.List;
@@ -18,9 +17,8 @@ import java.util.Map;
 
 @Component
 public class CustomHandleShakeInterceptors extends HttpSessionHandshakeInterceptor {
-	Logger log = LoggerFactory.getLogger(CustomHandleShakeInterceptors.class);
-	
 	private final HttpSessionRepository httpSessionRepository;
+	Logger log = LoggerFactory.getLogger(CustomHandleShakeInterceptors.class);
 	
 	
 	public CustomHandleShakeInterceptors(HttpSessionRepository httpSessionRepository) {
@@ -30,17 +28,13 @@ public class CustomHandleShakeInterceptors extends HttpSessionHandshakeIntercept
 	
 	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-		List<String> cookies =request.getHeaders().get("Cookie");
-		if(cookies!=null)
-		{
-			for(String cookie : cookies)
-			{
-				if(cookie.startsWith("JSESSIONID"))
-				{
+		List<String> cookies = request.getHeaders().get("Cookie");
+		if (cookies != null) {
+			for (String cookie : cookies) {
+				if (cookie.startsWith("JSESSIONID")) {
 					String sessionId = cookie.split("=")[1];
-					HttpSession httpSession =  httpSessionRepository.findById(sessionId);
-					if(httpSession != null)
-					{
+					HttpSession httpSession = httpSessionRepository.findById(sessionId);
+					if (httpSession != null) {
 						log.info("Connected Session : {}", sessionId);
 						return true;
 					}

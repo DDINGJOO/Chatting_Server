@@ -29,7 +29,7 @@ public class TerminalService {
 		return terminalService;
 	}
 	
-	public String readLine(String prompt){
+	public String readLine(String prompt) {
 		String input = lineReader.readLine(prompt);
 		terminal.puts(InfoCmp.Capability.cursor_up);
 		terminal.puts(InfoCmp.Capability.delete_line);
@@ -37,7 +37,7 @@ public class TerminalService {
 		return input;
 	}
 	
-	public void PrintMessage(String username, String content){
+	public void PrintMessage(String username, String content) {
 		lineReader.printAbove(String.format("%s : %s", username, content));
 	}
 	
@@ -45,7 +45,7 @@ public class TerminalService {
 		lineReader.printAbove(" ==> " + content);
 	}
 	
-	public void clearTerminal(){
+	public void clearTerminal() {
 		terminal.puts(InfoCmp.Capability.clear_screen);
 		terminal.flush();
 	}

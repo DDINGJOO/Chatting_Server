@@ -20,7 +20,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import java.io.IOException;
 
 public class RestApiLoginAuthFilter extends AbstractAuthenticationProcessingFilter {
-	private  ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 	
 	
 	public RestApiLoginAuthFilter(RequestMatcher requiresAuthenticationRequestMatcher, AuthenticationManager authenticationManager) {

@@ -1,16 +1,12 @@
 package com.teambind.auth.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "message_user")
-@NoArgsConstructor
-@Getter
 public class MessageUserEntity {
 	
 	@Column(name = "user_id", nullable = false)
@@ -30,6 +26,10 @@ public class MessageUserEntity {
 	@Column(name = "updated_at", nullable = false)
 	private LocalDateTime updatedAt;
 	
+	protected MessageUserEntity() {
+		// JPA requires a no-arg constructor
+	}
+	
 	public MessageUserEntity(String username, String password) {
 		this.username = username;
 		this.password = password;
@@ -47,10 +47,6 @@ public class MessageUserEntity {
 		this.updatedAt = LocalDateTime.now();
 	}
 	
-
-	
-
-
 	
 	@Override
 	public String toString() {
@@ -68,12 +64,25 @@ public class MessageUserEntity {
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		MessageUserEntity that = (MessageUserEntity) o;
-		return Objects.equals(userId, that.userId);
+		return Objects.equals(username, that.username);
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(userId);
+		return Objects.hashCode(username);
+	}
+	
+	public Long getUserId() {
+		return userId;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public String getUsername() {
+		return username;
 	}
 }
+
 

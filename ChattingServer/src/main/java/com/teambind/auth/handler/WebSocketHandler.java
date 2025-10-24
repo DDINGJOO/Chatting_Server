@@ -18,7 +18,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 	}
 	
 	@Override
-	public void afterConnectionClosed(WebSocketSession session,@NonNull CloseStatus status) {
+	public void afterConnectionClosed(WebSocketSession session, @NonNull CloseStatus status) {
 		log.info("----Disconnected : {} ", session.getId());
 	}
 }

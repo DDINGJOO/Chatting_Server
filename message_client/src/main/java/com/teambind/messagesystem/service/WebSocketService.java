@@ -58,10 +58,9 @@ public class WebSocketService {
 	
 	
 	public void sendMessage(Message message) {
-		if(session != null && session.isOpen()) {
+		if (session != null && session.isOpen()) {
 			webSocketSender.sendMessage(session, message);
-		}
-		else {
+		} else {
 			terminalService.printSystemMessage("Session is not open. Message not sent.");
 		}
 	}

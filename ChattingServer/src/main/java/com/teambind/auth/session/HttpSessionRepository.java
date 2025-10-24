@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class HttpSessionRepository implements HttpSessionListener {
-	private  final Logger logger = LoggerFactory.getLogger(HttpSessionRepository.class);
+	private final Logger logger = LoggerFactory.getLogger(HttpSessionRepository.class);
 	private final Map<String, HttpSession> sessions = new ConcurrentHashMap<>();
 	
 	@Override

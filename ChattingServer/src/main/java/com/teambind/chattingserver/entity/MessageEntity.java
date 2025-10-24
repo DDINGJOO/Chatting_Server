@@ -1,8 +1,6 @@
 package com.teambind.chattingserver.entity;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -50,8 +48,8 @@ public class MessageEntity {
 	
 	@Override
 	public boolean equals(Object o) {
-		if(this == o) return true;
-		if(o == null || getClass() != o.getClass()) return false;
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 		MessageEntity that = (MessageEntity) o;
 		return messageSequence.equals(that.messageSequence);
 	}
@@ -73,6 +71,5 @@ public class MessageEntity {
 	}
 	
 	
-
 }
 

@@ -54,7 +54,7 @@ public class MessageClient {
 					default -> false;
 				};
 				
-				if(exit)
+				if (exit)
 					break;
 			} else if (!input.isEmpty()) {
 				terminalService.PrintMessage("me", input);

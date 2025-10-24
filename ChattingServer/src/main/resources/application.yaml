@@ -1,7 +1,7 @@
 spring:
   application:
-    name: chatting-server
+    name: group-chat-using-session
   profiles:
     active: dev
 server:
-  port: 8085
+  port: 8080

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 public class MessageEntity extends BaseEntity {
 	
-	@Column(name = "message_sequence", nullable = false)
+	@Column(name = "message_sequence")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Long messageSequence;

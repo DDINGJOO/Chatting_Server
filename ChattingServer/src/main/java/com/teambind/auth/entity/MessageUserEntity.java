@@ -10,7 +10,7 @@ import java.util.Objects;
 @Table(name = "message_user")
 public class MessageUserEntity extends BaseEntity {
 	
-	@Column(name = "user_id", nullable = false)
+	@Column(name = "user_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Long userId;

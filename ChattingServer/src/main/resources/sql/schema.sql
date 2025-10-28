@@ -1,4 +1,4 @@
-create table if not exists message
+create table if not exists messageRequest
 (
     message_sequence bigint auto_increment,
     user_name        varchar(20)   not null,

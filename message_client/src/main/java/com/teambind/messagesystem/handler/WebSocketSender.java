@@ -1,6 +1,6 @@
 package com.teambind.messagesystem.handler;
 
-import com.teambind.messagesystem.dto.Message;
+import com.teambind.messagesystem.dto.MessageRequest;
 import com.teambind.messagesystem.service.TerminalService;
 import com.teambind.messagesystem.util.JsonUtil;
 import jakarta.websocket.Session;
@@ -15,14 +15,15 @@ public class WebSocketSender {
 		this.terminalService = terminalService;
 	}
 	
-	public void sendMessage(Session session, Message message) {
+	public void sendMessage(Session session, MessageRequest messageRequest) {
 		if (session != null && session.isOpen()) {
-			JsonUtil.toJson(message).ifPresent(msg -> {
-				try {
-					session.getBasicRemote().sendText(msg);
-				} catch (IOException e) {
-					terminalService.printSystemMessage(String.format("Failed to send message to %s. Reason: %s", session.getId(), e.getMessage()));
-				}
+			JsonUtil.toJson(messageRequest).ifPresent(payload -> {
+				session.getAsyncRemote()
+						.sendText(payload, result -> {
+							if (!result.isOK()) {
+								terminalService.printSystemMessage(String.format("Failed to send message %s. Reason: %s", payload, result.getException().getMessage()));
+							}
+						});
 			});
 		}
 	}

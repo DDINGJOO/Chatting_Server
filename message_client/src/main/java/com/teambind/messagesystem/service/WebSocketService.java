@@ -1,6 +1,6 @@
 package com.teambind.messagesystem.service;
 
-import com.teambind.messagesystem.dto.Message;
+import com.teambind.messagesystem.dto.MessageRequest;
 import com.teambind.messagesystem.handler.WebSocketMessageHandler;
 import com.teambind.messagesystem.handler.WebSocketSender;
 import com.teambind.messagesystem.handler.WebSocketSessionHandler;
@@ -57,9 +57,9 @@ public class WebSocketService {
 	}
 	
 	
-	public void sendMessage(Message message) {
+	public void sendMessage(MessageRequest messageRequest) {
 		if (session != null && session.isOpen()) {
-			webSocketSender.sendMessage(session, message);
+			webSocketSender.sendMessage(session, messageRequest);
 		} else {
 			terminalService.printSystemMessage("Session is not open. Message not sent.");
 		}

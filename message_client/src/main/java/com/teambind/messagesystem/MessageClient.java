@@ -1,6 +1,6 @@
 package com.teambind.messagesystem;
 
-import com.teambind.messagesystem.dto.Message;
+import com.teambind.messagesystem.dto.MessageRequest;
 import com.teambind.messagesystem.handler.WebSocketMessageHandler;
 import com.teambind.messagesystem.handler.WebSocketSender;
 import com.teambind.messagesystem.service.TerminalService;
@@ -58,7 +58,7 @@ public class MessageClient {
 					break;
 			} else if (!input.isEmpty()) {
 				terminalService.PrintMessage("me", input);
-				webSocketService.sendMessage(new Message("test client", input));
+				webSocketService.sendMessage(new MessageRequest("test client", input));
 				
 			}
 		}

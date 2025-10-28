@@ -1,6 +1,6 @@
 package com.teambind.messagesystem.handler;
 
-import com.teambind.messagesystem.dto.Message;
+import com.teambind.messagesystem.dto.MessageRequest;
 import com.teambind.messagesystem.service.TerminalService;
 import com.teambind.messagesystem.util.JsonUtil;
 import jakarta.websocket.MessageHandler;
@@ -16,8 +16,8 @@ public class WebSocketMessageHandler implements MessageHandler.Whole<String> {
 	
 	@Override
 	public void onMessage(String payload) {
-		JsonUtil.fromJson(payload, Message.class).ifPresent(message -> {
-			terminalService.PrintMessage(message.username(), message.content());
+		JsonUtil.fromJson(payload, MessageRequest.class).ifPresent(messageRequest -> {
+			terminalService.PrintMessage(messageRequest.username(), messageRequest.content());
 		});
 		
 	}

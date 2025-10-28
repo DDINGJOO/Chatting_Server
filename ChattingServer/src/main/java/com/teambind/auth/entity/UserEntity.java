@@ -2,11 +2,18 @@ package com.teambind.auth.entity;
 
 import com.teambind.common.config.baseEntity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "message_user")
+@Getter
+@Setter
+@ToString
 public class UserEntity extends BaseEntity {
 	
 	@Column(name = "user_id")
@@ -20,6 +27,11 @@ public class UserEntity extends BaseEntity {
 	@Column(name = "password", nullable = false)
 	private String password;
 	
+	@Column(name ="connection_invite_code", nullable = false)
+	private String connectionInviteCode;
+	
+	@Column(name = "connection_count", nullable = false)
+	private int connectionCount;
 	
 	protected UserEntity() {
 		// JPA requires a no-arg constructor
@@ -28,22 +40,12 @@ public class UserEntity extends BaseEntity {
 	public UserEntity(String username, String password) {
 		this.username = username;
 		this.password = password;
+		this.connectionInviteCode = UUID.randomUUID().toString().replace("-", "");
 	}
 	
 	
 
-	
-	@Override
-	public String toString() {
-		return "MessageEntity{" +
-				"userId=" + userId +
-				", username='" + username + '\'' +
-				", password='" + password + '\'' +
-				", createdAt=" + getCreatedAt() +
-				", updatedAt=" + getUpdatedAt() +
-				'}';
-	}
-	
+
 	
 	@Override
 	public boolean equals(Object o) {

@@ -1,6 +1,6 @@
 package com.teambind.common.config.auth;
 
-import com.teambind.contents.Constants;
+import com.teambind.constant.Constants;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

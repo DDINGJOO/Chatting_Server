@@ -1,4 +1,4 @@
-package com.teambind.contents;
+package com.teambind.constant;
 
 public enum Constants {
 	HTTP_SESSION_ID("HTTP_SESSION_ID");

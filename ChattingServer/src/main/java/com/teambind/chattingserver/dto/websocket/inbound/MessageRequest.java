@@ -2,9 +2,7 @@ package com.teambind.chattingserver.dto.websocket.inbound;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.teambind.contents.MessageType;
-import lombok.Getter;
-
+import com.teambind.constant.MessageType;
 
 
 public class MessageRequest extends BaseRequest{

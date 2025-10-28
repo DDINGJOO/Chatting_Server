@@ -1,4 +1,4 @@
-package com.teambind.contents;
+package com.teambind.constant;
 
 public class MessageType {
 	public static final String MESSAGE = "MESSAGE";

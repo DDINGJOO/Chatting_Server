@@ -3,12 +3,11 @@ package com.teambind.auth.entity;
 import com.teambind.common.config.baseEntity.BaseEntity;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "message_user")
-public class MessageUserEntity extends BaseEntity {
+public class UserEntity extends BaseEntity {
 	
 	@Column(name = "user_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +21,11 @@ public class MessageUserEntity extends BaseEntity {
 	private String password;
 	
 	
-	protected MessageUserEntity() {
+	protected UserEntity() {
 		// JPA requires a no-arg constructor
 	}
 	
-	public MessageUserEntity(String username, String password) {
+	public UserEntity(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}
@@ -49,7 +48,7 @@ public class MessageUserEntity extends BaseEntity {
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
-		MessageUserEntity that = (MessageUserEntity) o;
+		UserEntity that = (UserEntity) o;
 		return Objects.equals(username, that.username);
 	}
 	

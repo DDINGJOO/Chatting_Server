@@ -1,7 +1,7 @@
 package com.teambind.chattingserver.controller;
 
 import com.teambind.auth.dto.UserRegisterRequest;
-import com.teambind.chattingserver.service.MessageUserService;
+import com.teambind.chattingserver.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-public class MessageUserController {
-	Logger log = LoggerFactory.getLogger(MessageUserController.class);
-	private final MessageUserService messageUserService;
+public class UserController {
+	Logger log = LoggerFactory.getLogger(UserController.class);
+	private final UserService userService;
 	
-	public MessageUserController(MessageUserService messageUserService) {
-		this.messageUserService = messageUserService;
+	public UserController(UserService userService) {
+		this.userService = userService;
 	}
 	
 	
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@RequestBody UserRegisterRequest req) {
 		try {
-			var response = messageUserService.addUser(req.username(), req.password());
+			var response = userService.addUser(req.username(), req.password());
 			return ResponseEntity.ok("User registered successfully: ");
 		}catch (
 				Exception e
@@ -39,7 +39,7 @@ public class MessageUserController {
 	@PostMapping("/unregister")
 	public ResponseEntity<String> unregister(HttpServletRequest request) {
 		try {
-			messageUserService.removeUser();
+			userService.removeUser();
 			request.getSession().invalidate();
 			return ResponseEntity.ok("User unregistered successfully");
 		}catch (

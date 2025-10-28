@@ -1,7 +1,7 @@
 package com.teambind.chattingserver.dto.websocket.inbound;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.teambind.contents.MessageType;
+import com.teambind.constant.MessageType;
 
 
 

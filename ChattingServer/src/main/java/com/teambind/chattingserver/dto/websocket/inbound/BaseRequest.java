@@ -3,7 +3,7 @@ package com.teambind.chattingserver.dto.websocket.inbound;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.teambind.contents.MessageType;
+import com.teambind.constant.MessageType;
 import lombok.Getter;
 
 @JsonTypeInfo(

@@ -5,8 +5,6 @@ import com.teambind.messagesystem.service.TerminalService;
 import com.teambind.messagesystem.util.JsonUtil;
 import jakarta.websocket.Session;
 
-import java.io.IOException;
-
 public class WebSocketSender {
 	private final TerminalService terminalService;
 	

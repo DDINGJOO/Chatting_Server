@@ -32,7 +32,7 @@ public class UserConnectionEntity extends BaseEntity {
 	private UserConnectionStatus status;
 	
 	@Column(name = "inviter_user_id", nullable = false)
-	private Long inviterUserId;
+	private Long invitorUserId;
 	
 	@Override
 	public boolean equals(Object o) {

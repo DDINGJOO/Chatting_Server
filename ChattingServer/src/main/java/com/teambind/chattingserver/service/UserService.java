@@ -1,6 +1,9 @@
 package com.teambind.chattingserver.service;
 
 
+import com.teambind.auth.dto.InviteCode;
+import com.teambind.auth.dto.User;
+import com.teambind.auth.dto.projection.UsernameProjection;
 import com.teambind.auth.entity.UserEntity;
 import com.teambind.auth.entity.UserId;
 import com.teambind.auth.repository.UserRepository;
@@ -9,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -23,6 +28,15 @@ public class UserService {
 		this.passwordEncoder = passwordEncoder;
 	}
 	
+	
+	public Optional<String> getUsername(UserId userId) {
+		return userRepository.findByUserId(userId.id()).map(UsernameProjection::getUsername);
+	}
+	public Optional<User> getUser(InviteCode code)
+	{
+		return userRepository.findByConnectionInviteCode(code.code()).map(
+				entity -> new User(new UserId(entity.getUserId()), entity.getUsername()));
+	}
 	
 	@Transactional
 	public UserId addUser(String username, String password) {

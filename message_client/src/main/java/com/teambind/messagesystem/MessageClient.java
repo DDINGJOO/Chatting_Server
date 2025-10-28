@@ -13,7 +13,7 @@ public class MessageClient {
 	
 	
 	public static void main(String[] args) throws URISyntaxException {
-		final String WEBSOCKET_BASE_URL = "localhost:8080";
+		final String BASE_URL = "localhost:8080";
 		final String WEBSOCKET_PATH = "/ws/v1/message";
 		TerminalService terminalService;
 		try {
@@ -25,7 +25,7 @@ public class MessageClient {
 		
 		
 		WebSocketSender webSocketSender = new WebSocketSender(terminalService);
-		WebSocketService webSocketService = new WebSocketService(terminalService, webSocketSender, WEBSOCKET_BASE_URL, WEBSOCKET_PATH);
+		WebSocketService webSocketService = new WebSocketService(terminalService, webSocketSender, BASE_URL, WEBSOCKET_PATH);
 		webSocketService.setWebSocketMessageHandler(new WebSocketMessageHandler(terminalService));
 		
 		

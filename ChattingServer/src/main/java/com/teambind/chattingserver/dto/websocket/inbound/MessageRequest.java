@@ -6,7 +6,7 @@ import com.teambind.contents.MessageType;
 import lombok.Getter;
 
 
-@Getter
+
 public class MessageRequest extends BaseRequest{
 	
 	private final String username;
@@ -19,5 +19,13 @@ public class MessageRequest extends BaseRequest{
 		super(MessageType.MESSAGE);
 		this.username = username;
 		this.content = content;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public String getContent() {
+		return content;
 	}
 }

@@ -1,6 +1,7 @@
 package com.teambind.messagesystem.handler;
 
-import com.teambind.messagesystem.dto.MessageRequest;
+
+import com.teambind.messagesystem.dto.websocket.outbound.MessageRequest;
 import com.teambind.messagesystem.service.TerminalService;
 import com.teambind.messagesystem.util.JsonUtil;
 import jakarta.websocket.Session;

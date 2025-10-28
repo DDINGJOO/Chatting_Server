@@ -6,13 +6,14 @@ import com.teambind.messagesystem.contents.MessageType;
 
 
 public class MessageRequest extends BaseRequest{
-	
+
 	private final String username;
 	private final String content;
-	
+
+	@JsonCreator
 	public MessageRequest(
-			 String username,
-			 String content){
+			@JsonProperty("username") String username,
+			@JsonProperty("content") String content){
 		super(MessageType.MESSAGE);
 		this.username = username;
 		this.content = content;

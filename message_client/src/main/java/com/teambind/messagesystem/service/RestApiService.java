@@ -44,7 +44,7 @@ public class RestApiService {
 	
 	public boolean login(String username, String password)
 	{
-		return request("/api/v1/auth/login", sessionId, null).map(
+		return request("/api/v1/auth/login", "", new LoginRequest(username, password)).map(
 				httpResponse
 						->{
 					if (httpResponse.statusCode() == HttpStatus.OK_200.getStatusCode()) {

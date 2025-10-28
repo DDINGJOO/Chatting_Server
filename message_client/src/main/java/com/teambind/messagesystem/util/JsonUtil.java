@@ -18,7 +18,9 @@ public class JsonUtil {
 		try {
 			return Optional.of(objectMapper.readValue(json, clazz));
 		} catch (Exception e) {
-			terminalService.printSystemMessage("Failed to convert JSON to object: " + e.getMessage());
+			if (terminalService != null) {
+				terminalService.printSystemMessage("Failed to convert JSON to object: " + e.getMessage());
+			}
 			return Optional.empty();
 		}
 	}
@@ -27,8 +29,10 @@ public class JsonUtil {
 		try {
 			return Optional.of(objectMapper.writeValueAsString(object));
 		} catch (Exception e) {
-			terminalService.printSystemMessage("Failed to convert object to JSON: " + e.getMessage());
-			return null;
+			if (terminalService != null) {
+				terminalService.printSystemMessage("Failed to convert object to JSON: " + e.getMessage());
+			}
+			return Optional.empty();
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package com.teambind.chattingserver.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,11 @@ public class SessionService {
 			httpSession.setLastAccessedTime(Instant.now());
 			
 		}
+		
+	}
+	
+	public String getUsername(){
+		return SecurityContextHolder.getContext().getAuthentication().getName();
 		
 	}
 }

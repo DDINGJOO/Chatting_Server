@@ -18,6 +18,8 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class RestApiLoginAuthFilter extends AbstractAuthenticationProcessingFilter {
 	private ObjectMapper objectMapper;
@@ -49,10 +51,12 @@ public class RestApiLoginAuthFilter extends AbstractAuthenticationProcessingFilt
 		
 		HttpSessionSecurityContextRepository contextRepository = new HttpSessionSecurityContextRepository();
 		contextRepository.saveContext(securityContext, request, response);
+		String sessionId = request.getSession().getId();
+		String encodedSessionId= Base64.getEncoder().encodeToString(sessionId.getBytes(StandardCharsets.UTF_8));
 		
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setContentType(MediaType.TEXT_PLAIN_VALUE);
-		response.getWriter().write(request.getSession().getId());
+		response.getWriter().write(encodedSessionId);
 		response.getWriter().flush();
 	}
 	

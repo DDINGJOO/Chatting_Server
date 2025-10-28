@@ -36,4 +36,13 @@ public class MessageUserService {
 		return new UserId(messageUserEntity.getUserId());
 	}
 	
+	@Transactional
+	public void removeUser() {
+		String username = sessionService.getUsername();
+		messageUserRepository.findByUsername(username).ifPresent(messageUserEntity -> {
+			log.info("User {} removed", username);
+			messageUserRepository.delete(messageUserEntity);
+		});
+	}
+	
 }

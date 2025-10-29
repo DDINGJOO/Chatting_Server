@@ -1,6 +1,6 @@
 spring:
   application:
-    name: group-chat-using-session
+    name: message-system-add-connection
   profiles:
     active: dev
 server:

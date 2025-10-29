@@ -14,7 +14,7 @@ public class MessageRequest extends BaseRequest{
 	public MessageRequest(
 			@JsonProperty("username") String username,
 			@JsonProperty("content") String content){
-		super(MessageType.MESSAGE);
+		super(MessageType.WRITE_MESSAGE);
 		this.username = username;
 		this.content = content;
 	}

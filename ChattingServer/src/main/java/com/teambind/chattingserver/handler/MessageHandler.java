@@ -1,15 +1,16 @@
 package com.teambind.chattingserver.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teambind.auth.entity.UserId;
 import com.teambind.chattingserver.dto.Message;
 import com.teambind.chattingserver.dto.websocket.inbound.BaseRequest;
 import com.teambind.chattingserver.dto.websocket.inbound.KeepAliveRequest;
-import com.teambind.chattingserver.dto.websocket.inbound.MessageRequest;
+import com.teambind.chattingserver.dto.websocket.inbound.WriteMessageRequest;
 import com.teambind.chattingserver.entity.MessageEntity;
 import com.teambind.chattingserver.repository.MessageRepository;
 import com.teambind.chattingserver.service.SessionService;
 import com.teambind.chattingserver.session.WebSocketSessionManager;
 import com.teambind.constant.Constants;
+import com.teambind.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
@@ -23,12 +24,13 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 @Component
 public class MessageHandler extends TextWebSocketHandler {
 	private static final Logger log = LoggerFactory.getLogger(MessageHandler.class);
-	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final JsonUtil jsonUtil;
 	private final WebSocketSessionManager sessionManager;
 	private final SessionService sessionService;
 	private final MessageRepository messageRepository;
 	
-	public MessageHandler(WebSocketSessionManager sessionManager, SessionService sessionService, MessageRepository messageRepository) {
+	public MessageHandler(JsonUtil jsonUtil, WebSocketSessionManager sessionManager, SessionService sessionService, MessageRepository messageRepository) {
+		this.jsonUtil = jsonUtil;
 		this.sessionManager = sessionManager;
 		this.sessionService = sessionService;
 		this.messageRepository = messageRepository;
@@ -37,7 +39,8 @@ public class MessageHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, @NonNull CloseStatus status) {
 		log.info("Connection Closed: {} from{}", status, session.getId());
-		sessionManager.terminateSession(session.getId());
+		UserId userId = (UserId) session.getAttributes().get(Constants.USER_ID.getValue());
+		sessionManager.closeSession(userId);
 		log.warn("not exist empty session : {}", session.getId());
 	}
 	
@@ -46,10 +49,10 @@ public class MessageHandler extends TextWebSocketHandler {
 		String payload = message.getPayload();
 		log.info("Message Received: {} from {}", payload, senderSession.getId());
 		try {
-			BaseRequest baseRequest = objectMapper.readValue(payload, BaseRequest.class);
-			if(baseRequest instanceof MessageRequest)
+			BaseRequest baseRequest = jsonUtil.fromJson(payload, BaseRequest.class).get();
+			if(baseRequest instanceof WriteMessageRequest)
 			{
-				Message receivedMessage = new Message(((MessageRequest) baseRequest).getUsername(), ((MessageRequest) baseRequest).getContent());
+				Message receivedMessage = new Message(((WriteMessageRequest) baseRequest).getUsername(), ((WriteMessageRequest) baseRequest).getContent());
 				messageRepository.save(new MessageEntity(receivedMessage.username(), receivedMessage.content()));
 				sessionManager.getSessions().forEach(
 						participantSession -> {
@@ -75,7 +78,8 @@ public class MessageHandler extends TextWebSocketHandler {
 	@Override
 	public void handleTransportError(WebSocketSession session, Throwable exception) {
 		log.error("TransPortError: {} , from : {}", exception.getMessage(), session.getId());
-		sessionManager.terminateSession(session.getId());
+		UserId userId = (UserId) session.getAttributes().get(Constants.USER_ID.getValue());
+		sessionManager.closeSession(userId);
 	}
 	
 	@Override
@@ -85,18 +89,8 @@ public class MessageHandler extends TextWebSocketHandler {
 		ConcurrentWebSocketSessionDecorator concurrentWebSocketSessionDecorator =
 				new ConcurrentWebSocketSessionDecorator(session, 5000, 100 * 1024);
 		
-		sessionManager.storeSession(concurrentWebSocketSessionDecorator);
+		UserId userId = (UserId) session.getAttributes().put(Constants.USER_ID.getValue(), session.getId());
+		sessionManager.putSession(userId,concurrentWebSocketSessionDecorator);
 	}
 	
-	
-	private void sendMessage(WebSocketSession session, Message message) {
-		try {
-			String msg = objectMapper.writeValueAsString(message);
-			session.sendMessage(new TextMessage(msg));
-			log.info("sendMessage : {} to {}", msg, session.getId());
-		} catch (Exception e) {
-			log.error("메세지 발송 실패 to {} error : {} ", session.getId(), e.getMessage());
-			
-		}
-	}
 }

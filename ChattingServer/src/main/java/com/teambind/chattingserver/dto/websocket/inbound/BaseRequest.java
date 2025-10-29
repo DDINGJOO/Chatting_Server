@@ -12,8 +12,9 @@ import lombok.Getter;
 		property = "type"
 )
 @JsonSubTypes({
-		@JsonSubTypes.Type(value = MessageRequest.class, name = MessageType.WRITE_MESSAGE),
-		@JsonSubTypes.Type(value = KeepAliveRequest.class, name = MessageType.KEEP_ALIVE)
+		@JsonSubTypes.Type(value = WriteMessageRequest.class, name = MessageType.WRITE_MESSAGE),
+		@JsonSubTypes.Type(value = KeepAliveRequest.class, name = MessageType.KEEP_ALIVE),
+		@JsonSubTypes.Type(value = InviteRequest.class, name=  MessageType.INVITE_REQUEST)
 })
 @Getter
 public abstract class BaseRequest {

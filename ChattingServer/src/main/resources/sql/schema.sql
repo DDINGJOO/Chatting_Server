@@ -17,7 +17,7 @@ create table if not exists message_user
     user_id    bigint auto_increment,
     username   varchar(20)  not null,
     password   varchar(255) not null,
-    connection_invite_code varchar(20) not null,
+    connection_invite_code varchar(32) not null,
     connection_count int not null,
     created_at timestamp    not null,
     updated_at timestamp    not null,

@@ -1,13 +1,7 @@
 package com.teambind.chattingserver.handler;
 
 import com.teambind.auth.entity.UserId;
-import com.teambind.chattingserver.dto.Message;
 import com.teambind.chattingserver.dto.websocket.inbound.BaseRequest;
-import com.teambind.chattingserver.dto.websocket.inbound.KeepAliveRequest;
-import com.teambind.chattingserver.dto.websocket.inbound.WriteMessageRequest;
-import com.teambind.chattingserver.entity.MessageEntity;
-import com.teambind.chattingserver.repository.MessageRepository;
-import com.teambind.chattingserver.service.SessionService;
 import com.teambind.chattingserver.session.WebSocketSessionManager;
 import com.teambind.constant.Constants;
 import com.teambind.util.JsonUtil;
@@ -22,21 +16,18 @@ import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorato
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
-public class MessageHandler extends TextWebSocketHandler {
-	private static final Logger log = LoggerFactory.getLogger(MessageHandler.class);
+public class WebSocketHandler extends TextWebSocketHandler {
+	private static final Logger log = LoggerFactory.getLogger(WebSocketHandler.class);
 	private final JsonUtil jsonUtil;
 	private final WebSocketSessionManager sessionManager;
-	private final SessionService sessionService;
-	private final MessageRepository messageRepository;
 	private final RequestHandlerDispatcher requestHandlerDispatcher;
 	
-	public MessageHandler(JsonUtil jsonUtil, WebSocketSessionManager sessionManager, SessionService sessionService, MessageRepository messageRepository, RequestHandlerDispatcher requestHandlerDispatcher) {
+	public WebSocketHandler(JsonUtil jsonUtil, WebSocketSessionManager sessionManager, RequestHandlerDispatcher requestHandlerDispatcher) {
 		this.jsonUtil = jsonUtil;
 		this.sessionManager = sessionManager;
-		this.sessionService = sessionService;
-		this.messageRepository = messageRepository;
 		this.requestHandlerDispatcher = requestHandlerDispatcher;
 	}
+	
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, @NonNull CloseStatus status) {

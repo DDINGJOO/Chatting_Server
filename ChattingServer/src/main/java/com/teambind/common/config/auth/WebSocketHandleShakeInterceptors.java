@@ -1,6 +1,7 @@
 package com.teambind.common.config.auth;
 
 import com.teambind.auth.auth.MessageUserDetails;
+import com.teambind.auth.entity.UserId;
 import com.teambind.constant.Constants;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class WebSocketHandleShakeInterceptors extends HttpSessionHandshakeInterc
 				return false;
 			}
 			MessageUserDetails userDetails =(MessageUserDetails)authentication.getPrincipal();
-			attributes.put(Constants.USER_ID.getValue(), userDetails.getUserId());
+			attributes.put(Constants.USER_ID.getValue(), new UserId(userDetails.getUserId()));
 			attributes.put(Constants.HTTP_SESSION_ID.getValue(), httpSession.getId());
 			return true;
 			

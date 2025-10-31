@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 
 @SpringBootTest(classes = ChattingServerApplication,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class MessageHandlerSpec extends Specification {
+class WebSocketHandlerSpec extends Specification {
 
     @LocalServerPort
     int port;

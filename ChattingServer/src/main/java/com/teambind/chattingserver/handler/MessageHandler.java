@@ -28,12 +28,14 @@ public class MessageHandler extends TextWebSocketHandler {
 	private final WebSocketSessionManager sessionManager;
 	private final SessionService sessionService;
 	private final MessageRepository messageRepository;
+	private final RequestHandlerDispatcher requestHandlerDispatcher;
 	
-	public MessageHandler(JsonUtil jsonUtil, WebSocketSessionManager sessionManager, SessionService sessionService, MessageRepository messageRepository) {
+	public MessageHandler(JsonUtil jsonUtil, WebSocketSessionManager sessionManager, SessionService sessionService, MessageRepository messageRepository, RequestHandlerDispatcher requestHandlerDispatcher) {
 		this.jsonUtil = jsonUtil;
 		this.sessionManager = sessionManager;
 		this.sessionService = sessionService;
 		this.messageRepository = messageRepository;
+		this.requestHandlerDispatcher = requestHandlerDispatcher;
 	}
 	
 	@Override
@@ -48,31 +50,8 @@ public class MessageHandler extends TextWebSocketHandler {
 	protected void handleTextMessage(WebSocketSession senderSession, TextMessage message) {
 		String payload = message.getPayload();
 		log.info("Message Received: {} from {}", payload, senderSession.getId());
-		try {
-			BaseRequest baseRequest = jsonUtil.fromJson(payload, BaseRequest.class).get();
-			if(baseRequest instanceof WriteMessageRequest)
-			{
-				Message receivedMessage = new Message(((WriteMessageRequest) baseRequest).getUsername(), ((WriteMessageRequest) baseRequest).getContent());
-				messageRepository.save(new MessageEntity(receivedMessage.username(), receivedMessage.content()));
-				sessionManager.getSessions().forEach(
-						participantSession -> {
-							// Compare by sessionId to handle decorated sessions correctly
-							if (!participantSession.getId().equals(senderSession.getId())) {
-								sendMessage(participantSession, receivedMessage);
-							}
-						}
-				);
-			}
-			
-			if(baseRequest instanceof KeepAliveRequest)
-			{
-				sessionService.refreshTTL(senderSession.getAttributes().get(Constants.HTTP_SESSION_ID.getValue()).toString());
-			}
-		} catch (Exception e) {
-			String errorMsg = "유효한 프로토콜이 아닙니다. : " + e.getMessage();
-			log.error("erroeMessage payload : {}, from {}", payload, senderSession.getId());
-			sendMessage(senderSession, new Message("system", errorMsg));
-		}
+		jsonUtil.fromJson(payload,BaseRequest.class).ifPresent(baseRequest -> {
+			requestHandlerDispatcher.dispatch(senderSession, baseRequest);});
 	}
 	
 	@Override

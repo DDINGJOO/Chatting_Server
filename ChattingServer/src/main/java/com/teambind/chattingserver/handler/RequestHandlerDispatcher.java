@@ -6,6 +6,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -24,6 +25,15 @@ public class RequestHandlerDispatcher {
 		this.beanFactory = beanFactory;
 	}
 	
+	public <T extends BaseRequest> void dispatch(WebSocketSession webSocketSession, T request) {
+		BaseRequestHandler<T> handler = (BaseRequestHandler<T>) handlerMap.get(request.getClass());
+		if(handler != null) {
+			handler.handleRequest(webSocketSession, request);
+			return;
+		}
+		log.error("No handler found for request type : {}", request.getClass().getSimpleName());
+	}
+	
 	@PostConstruct
 	public void prepareRequestHandlerMapping() {
 		Map<String, BaseRequestHandler> requestHandlerMap = beanFactory.getBeansOfType(BaseRequestHandler.class);
@@ -37,6 +47,7 @@ public class RequestHandlerDispatcher {
 		}
 	}
 	
+	// TODO : study deep dive
 	private Class<? extends BaseRequest> getRequestType(BaseRequestHandler request) {
 		for (Type type : request.getClass().getGenericInterfaces()) {
 			if (type instanceof ParameterizedType parameterizedType &&

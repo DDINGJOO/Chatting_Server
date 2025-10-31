@@ -52,7 +52,7 @@ public class WebSocketSessionManager {
 	}
 	
 	
-	private void sendMessage(WebSocketSession session, Message message) {
+	public void sendMessage(WebSocketSession session, Message message) {
 		jsonUtil.toJson(message).ifPresent(
 				msg -> {
 					try {

@@ -2,6 +2,7 @@ package com.teambind.chattingserver.handler.websocket;
 
 import com.teambind.chattingserver.dto.Message;
 import com.teambind.chattingserver.dto.websocket.inbound.WriteMessageRequest;
+import com.teambind.chattingserver.dto.websocket.outbound.MessageNotification;
 import com.teambind.chattingserver.entity.MessageEntity;
 import com.teambind.chattingserver.repository.MessageRepository;
 import com.teambind.chattingserver.session.WebSocketSessionManager;
@@ -20,8 +21,8 @@ public class WriteMessageRequestHandler  implements  BaseRequestHandler<WriteMes
 	
 	@Override
 	public void handleRequest(WebSocketSession webSocketSession, WriteMessageRequest request) {
-		Message receivedMessage = new Message(request.getUsername(), request.getContent());
-		messageRepository.save(new MessageEntity(receivedMessage.username(), receivedMessage.content()));
+		MessageNotification receivedMessage = new MessageNotification(request.getUsername(), request.getContent());
+		messageRepository.save(new MessageEntity(receivedMessage.getUsername(), receivedMessage.getContent()));
 		sessionManager.getSessions().forEach(
 				participantSession -> {
 					// Compare by sessionId to handle decorated sessions correctly

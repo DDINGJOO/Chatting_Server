@@ -2,6 +2,8 @@ package com.teambind.chattingserver.session;
 
 import com.teambind.auth.entity.UserId;
 import com.teambind.chattingserver.dto.Message;
+import com.teambind.chattingserver.dto.websocket.inbound.BaseRequest;
+import com.teambind.chattingserver.dto.websocket.outbound.BaseMessage;
 import com.teambind.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +54,7 @@ public class WebSocketSessionManager {
 	}
 	
 	
-	public void sendMessage(WebSocketSession session, Message message) {
+	public void sendMessage(WebSocketSession session, BaseMessage message) {
 		jsonUtil.toJson(message).ifPresent(
 				msg -> {
 					try {

@@ -3,7 +3,7 @@ package com.teambind.chattingserver.dto.websocket.outbound;
 import com.teambind.constant.MessageType;
 import lombok.Getter;
 
-@Getter
+
 public class MessageNotification extends BaseMessage {
 
 	private final String username;
@@ -13,5 +13,13 @@ public class MessageNotification extends BaseMessage {
 		super(MessageType.NOTIFY_MESSAGE);
 		this.username = username;
 		this.content = content;
+	}
+	
+	public String getContent() {
+		return content;
+	}
+	
+	public String getUsername() {
+		return username;
 	}
 }

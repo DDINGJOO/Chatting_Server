@@ -13,8 +13,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "user_connection")
 @IdClass(UserConnectionId.class)
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class UserConnectionEntity extends BaseEntity {
@@ -33,6 +31,17 @@ public class UserConnectionEntity extends BaseEntity {
 	
 	@Column(name = "inviter_user_id", nullable = false)
 	private Long invitorUserId;
+	
+	public UserConnectionEntity(long min, long max, UserConnectionStatus status, Long id) {
+		this.partnerUserAId = min;
+		this.partnerUserBId = max;
+		this.status = status;
+		this.invitorUserId = id;
+	}
+	
+	public UserConnectionEntity() {
+	
+	}
 	
 	@Override
 	public boolean equals(Object o) {

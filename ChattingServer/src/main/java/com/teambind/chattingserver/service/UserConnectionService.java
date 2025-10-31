@@ -50,16 +50,16 @@ public class UserConnectionService {
 				}
 				try{
 					setStatus(invitoerUserId, partnerUserId, UserConnectionStatus.PENDING);
-					yield Pair.of(Optional.of(partnerUserId), "invited");
+					yield Pair.of(Optional.of(partnerUserId), invitorUsername.get());
 				}catch (Exception e) {
 					log.error("setStatus error : {}", e.getMessage());
 					yield Pair.of(Optional.empty(), "setStatus error");
 				}
 			}
-			case ACCEPTED -> Pair.of(Optional.empty(), "already accepted with " + partnerUserName);
+			case ACCEPTED -> Pair.of(Optional.of(partnerUserId), "already accepted to " + partnerUserName);
 			case PENDING, REJECTED -> {
 				log.info("{} invites {} but dose not deliver inviation request", invitoerUserId, partnerUserId);
-				yield Pair.of(Optional.empty(), "already invited");
+				yield Pair.of(Optional.of(partnerUserId),  "already invited to " + partnerUserName);
 			}
 			default -> {
 				log.error("unknown status : {}", status);

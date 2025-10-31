@@ -6,8 +6,11 @@ import com.teambind.constant.MessageType;
 import lombok.Getter;
 
 
-@Getter
+
 public class WriteMessageRequest extends BaseRequest{
+	public String getUsername() {
+		return username;
+	}
 	
 	private final String username;
 	private final String content;
@@ -21,4 +24,7 @@ public class WriteMessageRequest extends BaseRequest{
 		this.content = content;
 	}
 	
+	public String getContent() {
+		return content;
+	}
 }

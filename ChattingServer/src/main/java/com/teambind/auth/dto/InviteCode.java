@@ -1,8 +1,13 @@
 package com.teambind.auth.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public record InviteCode(
-		String code
+		@JsonValue String code
 ) {
+	@JsonCreator
 	public InviteCode{
 		if(code == null || code.isEmpty())
 		{

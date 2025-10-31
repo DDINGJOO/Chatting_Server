@@ -7,7 +7,7 @@ import com.teambind.constant.MessageType;
 import lombok.Getter;
 
 
-@Getter
+
 public class InviteRequest extends BaseRequest{
 	
 	private final InviteCode userInviteCode;
@@ -22,4 +22,7 @@ public class InviteRequest extends BaseRequest{
 		
 	}
 	
+	public InviteCode getUserInviteCode() {
+		return userInviteCode;
+	}
 }

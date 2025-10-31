@@ -3,17 +3,20 @@ package com.teambind.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-@Slf4j
-@RequiredArgsConstructor
 public class JsonUtil {
-	
+	Logger log = LoggerFactory.getLogger(JsonUtil.class);
 	private final ObjectMapper objectMapper;
 	
+	public JsonUtil(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
+	}
 	
 	
 	public  <T> Optional<T> fromJson(String json, Class<T> clazz) {

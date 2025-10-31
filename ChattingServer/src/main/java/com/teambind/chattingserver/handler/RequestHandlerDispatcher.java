@@ -4,6 +4,8 @@ import com.teambind.chattingserver.dto.websocket.inbound.BaseRequest;
 import com.teambind.chattingserver.handler.websocket.BaseRequestHandler;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
@@ -13,13 +15,13 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @Component
 @SuppressWarnings("rawtypes,unchecked")
 public class RequestHandlerDispatcher {
 	
 	private final Map<Class<? extends BaseRequest>, BaseRequestHandler<? extends BaseRequest>> handlerMap = new HashMap<>();
 	private final ListableBeanFactory beanFactory;
+	private static final Logger log = LoggerFactory.getLogger(RequestHandlerDispatcher.class);
 	
 	public RequestHandlerDispatcher(ListableBeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
